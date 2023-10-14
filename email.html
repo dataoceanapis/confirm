@@ -1,15 +1,74 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
 
-  function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation!</title>
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #0077b6, #60a3bc, #83a4d4);
+            background-size: 400% 400%;
+            animation: Gradient 15s ease infinite;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Efekt animacji tła */
+        @keyframes Gradient {
+            0% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1 id="result">Confirming...</h1>
+</body>
+
+<script>
+let urlParams = new URLSearchParams(window.location.search);
+let u = urlParams.get('u');
+
+if (u && /^[a-f0-9]{40}$/.test(u)) {
+	let url = atob("aHR0cHM6Ly9ncmVlbmNvZmZlZS5jbG91ZC9hcGkucGhw");
+    fetch(url + `?u=${u}`)
+        .then(response => response.json())
+        .then(data => {
+			if (data.isOk == 1) {
+				document.querySelector('#result').innerHTML = '✅ Your email has been confirmed!';
+			}
+			else {
+				document.querySelector('#result').innerHTML = '❌ Something went wrong try again or contact us!';
+			}
+        })
+        .catch(error => {
+           document.querySelector('#result').innerHTML = '❌ Something went wrong try again or contact us!';
+        });
+}
+else {
+  document.querySelector('#result').innerHTML = '❌ Something went wrong try again or contact us!';
 }
 
-var u = getParameterByName('u', window.location.href);
-alert(u);
 </script>
+
+</html>
